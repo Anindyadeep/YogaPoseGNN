@@ -1,103 +1,65 @@
 import os 
 import sys 
-import cv2
-import torch
-import warnings
-import numpy as np
-import mediapipe as mp 
-
-mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles
-mp_pose = mp.solutions.pose
-warnings.filterwarnings("ignore")
+import argparse
 
 path = os.getcwd()
 sys.path.append(path)
-sys.path.append(path[:-1])
+sys.path.append("..")
 
-from src.utils import PoseUtils
-from src.dataset import YogaPosDataset
-from src.train import TrainModel
-from Models.base_gnn_model import Model 
+from src.live_detection import PoseRun
 
-LABELS = {
-    0 : "downdog",
-    1 : "goddess",
-    2 : "plank",
-    3 : "tree",
-    4 : "warrior"
-}
+parser = argparse.ArgumentParser(description="Different configurations to run the model for live yoga pose detection")
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model = Model(3, 64, 32, 5).to(device)
+parser.add_argument(
+  "--device",
+  dest="device",
+  type=str,
+  default="cpu",
+  help="Enable Cuda or not",
+  required = False
+)
 
-model_path = os.path.join(path, "saved_models/base_model.pth")
-model.load_state_dict(torch.load(model_path, map_location=torch.device(device)))
+parser.add_argument(
+  "--cam",
+  dest="cam",
+  type=int,
+  default=None,
+  help="The camera number to run the model in live camera",
+  required=False
+)
 
-root_data_path = os.path.join(path, "Data/")
-edge_index = YogaPosDataset(root_data_path, "train_data.csv").edge_index.to(device)
+parser.add_argument(  
+  "--vid_name",
+  dest="vid_name",
+  type=str,
+  default=None,
+  help="The name of the video [video.mp4] to run the model on some video. The video must be saved in [Sample_video/] path",
+  required=False
+)
+
+parser.add_argument(
+  "--save_as",
+  dest="save_as",
+  type=str,
+  default=None,
+  help="Saving the video if required and it will be saved on [Video_results/] folder automatically with the specified name"
+)
 
 
-pose_util = PoseUtils()
+parser.add_argument(
+  "--model",
+  dest="model",
+  type=str,
+  default=None,
+  help="The model to run this full detection process."
+)
 
-video_path = os.path.join("/home/anindya/Documents/MachineLearning/YogaGNN/Sample_video/How to Do a Warrior Two _ Yoga-QbIrd6onJwQ.mp4")
-font = cv2.FONT_HERSHEY_SIMPLEX
+args = parser.parse_args()
 
-
-cap = cv2.VideoCapture(video_path)
-frame_width = int(cap.get(3))
-frame_height = int(cap.get(4))
-   
-size = (frame_width, frame_height)
-vid_result = cv2.VideoWriter('result.avi', 
-                         cv2.VideoWriter_fourcc(*'MJPG'),
-                         30, size)
-
-with mp_pose.Pose(
-    min_detection_confidence=0.5,
-    min_tracking_confidence=0.5) as pose:
-  while cap.isOpened():
-    success, image = cap.read()
-    if not success:
-      print("Ignoring empty camera frame.")
-      # If loading a video, use 'break' instead of 'continue'.
-      continue
-
-    # To improve performance, optionally mark the image as not writeable to
-    # pass by reference.
-    image.flags.writeable = False
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    results = pose.process(image)
-
-    if not results.pose_landmarks:
-        continue
-
-    pos_dict = pose_util.get_pose_landmark_positions(results.pose_landmarks)
-    x = torch.tensor(np.array(list(pos_dict.values())).reshape(14, 3), dtype=torch.float32).to(device)
-    out = model(x, edge_index, torch.tensor([0]))
-    predictions = out.argmax(dim=1).item()
-    cv2.putText(image, 
-                LABELS[predictions], 
-                (50, 50), 
-                font, 1, 
-                (0, 255, 255), 
-                2, 
-                cv2.LINE_4)
-
-    # Draw the pose annotation on the image.
-    image.flags.writeable = True
-    image = cv2.flip(image, 1)
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    
-    mp_drawing.draw_landmarks(
-        image,
-        results.pose_landmarks,
-        mp_pose.POSE_CONNECTIONS,
-        landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
-    # Flip the image horizontally for a selfie-view display.
-    cv2.imshow('MediaPipe Pose', cv2.flip(image, 1))
-    vid_result.write(cv2.flip(image, 1))
-    if cv2.waitKey(5) & 0xFF == 27:
-      break
-cap.release()
-vid_result.release()
+poserun = PoseRun(device=args.device)
+poserun.run_video(
+  video_name=args.vid_name,
+  cam_num=args.cam,
+  capture_save_as=args.save_as,
+  model=args.model
+)
