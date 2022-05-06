@@ -10,6 +10,7 @@ import streamlit as st
 warnings.filterwarnings("ignore")
 
 path = os.getcwd()
+
 sys.path.append(path)
 sys.path.append("..")
 
@@ -35,10 +36,7 @@ class StreamlitAppDetection(object):
         st.title("Real time Yoga Pose APP")
         st.text("Streamlit 💚 Mediapipe 💚 PyTorch Geometric")
         cam_nums = self.__find_camera_devices()
-        if len(cam_nums) > 1:
-            selected_cam = st.selectbox('Select camera devices from the available cams found.', cam_nums)
-        else:
-            selected_cam = cam_nums[0]
+        selected_cam = -1
 
         PoseRun(device='cpu').run_detection_on_app(cam_num=selected_cam)
     
@@ -120,6 +118,21 @@ Just type:
 streamlit run app.py
 ```
 And this will run the webapp on the localhost
+
+### **Build and run docker image**
+
+To create the image type:
+```
+docker build -t <image_name> . 
+```
+Here `<image_name>` is the custom name of the image.
+
+To run the image type:
+```
+docker run --privileged --device=/dev/video0:/dev/video0 <image_name>
+```
+This will do all the work from installation of the dependencies to running the project on localhost.
+
 
 ## **Results**
 

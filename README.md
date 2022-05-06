@@ -72,6 +72,20 @@ streamlit run app.py
 ```
 And this will run the webapp on the localhost
 
+### **Build and run docker image**
+
+To create the image type:
+```
+docker build -t <image_name> . 
+```
+Here `<image_name>` is the custom name of the image.
+
+To run the image type:
+```
+docker run --privileged --device=/dev/video0:/dev/video0 <image_name>
+```
+This will do all the work from installation of the dependencies to running the project on localhost.
+
 ## **Results**
 
 Intial results of the model is pretty good based on the fact it has relatively less training data as its just 250 images (per class). After training the model is giving a train accuracy of `0.86` and a test accuracy of `0.90`. This could be improved by improving the model and adding edge features also. This model is also using limited nodes, as I did't add the face and the palm nodes, in order to make it more realistic. 

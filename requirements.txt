@@ -96,11 +96,11 @@ tinycss2==1.1.1
 toml==0.10.2
 toolz==0.11.2
 
--f https://download.pytorch.org/whl/cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
 torch
--f https://download.pytorch.org/whl/cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
 torchvision 
--f` https://download.pytorch.org/whl/cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
 torchaudio
 
 -f https://data.pyg.org/whl/torch-1.11.0+cpu.html
