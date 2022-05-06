@@ -113,6 +113,14 @@ This will train the model and will save the weights on the `saved_models` direct
 
 ---
 
+## **How to run the webapp**
+
+Just type:
+```bash
+streamlit run app.py
+```
+And this will run the webapp on the localhost
+
 ## **Results**
 
 Intial results of the model is pretty good based on the fact it has relatively less training data as its just 250 images (per class). After training the model is giving a train accuracy of `0.86` and a test accuracy of `0.90`. This could be improved by improving the model and adding edge features also. This model is also using limited nodes, as I did't add the face and the palm nodes, in order to make it more realistic. 
@@ -121,8 +129,8 @@ Intial results of the model is pretty good based on the fact it has relatively l
 
 ## **Future Works**
 Using **Temporal Graph Neural Nets** could make more robust and accurate model for this kind of problem. But for that we need temporal data like videos instaed of images, so that we could generate `static temporal graphs` and compute on them as a dynamic graph sequence problem.
-            """
-        )
+""")
+
     def about_me(self):
         st.markdown(
         """
