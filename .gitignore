@@ -11,3 +11,6 @@ Sample_video/Goddess.mkv
 Sample_video/plank.mp4
 Sample_video/Tree.mp4
 Sample_video/Warrior2.mp4
+
+Models/__pycache__
+src/__pycache__
