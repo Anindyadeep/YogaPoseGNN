@@ -5,6 +5,7 @@ import torch
 import warnings
 import numpy as np
 import mediapipe as mp 
+import streamlit as st 
 from pathlib import Path
 
 mp_drawing = mp.solutions.drawing_utils
@@ -61,6 +62,56 @@ class PoseRun(object):
                              cv2.VideoWriter_fourcc(*'MJPG'),
                              30, size)
     return vid_result
+
+
+  def run_detection_on_app(self, cam_num = None):
+        self.model = self.load_model() 
+        edge_index = self.load_edge_index()
+
+        col1, col2 = st.columns([.33,1])
+        run = col1.button('Switch on the video')
+        stop = col2.button('Switch off the video')
+
+        FRAME_WINDOW = st.image([])
+        cap = cv2.VideoCapture(0 if cam_num is None else cam_num)
+        with mp_pose.Pose(min_detection_confidence = 0.5, min_tracking_confidence = 0.5) as pose:
+          while run and not stop:
+                sucess, frame = cap.read()
+                if not sucess:
+                      continue 
+
+                image = cv2.flip(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), 1)
+                results = pose.process(image)
+                if not results.pose_landmarks: 
+                  continue
+
+                pos_dict = self.pose_util.get_pose_landmark_positions(results.pose_landmarks)
+                x = torch.tensor(np.array(list(pos_dict.values())).reshape(14, 3), dtype=torch.float32).to(self.device)
+                out = self.model(x, edge_index, torch.tensor([0]))
+                
+                predictions = out.argmax(dim=1).item()
+                mp_drawing.draw_landmarks(
+                  image,
+                  results.pose_landmarks,
+                  mp_pose.POSE_CONNECTIONS,
+                  landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
+                
+                image = cv2.flip(image, 1)
+
+                cv2.putText(
+                  image, 
+                  f"Position: {self.LABELS[predictions]}", 
+                  (50, 50), 
+                  self._font, 1.5, 
+                  (0, 255, 255), 
+                  4, 
+                  cv2.LINE_4)
+
+                FRAME_WINDOW.image(image)
+          else:
+                pass 
+
+
   
   def run_video(self, video_name = None, cam_num = None, model = None, capture_save_as = None):
     self.model = self.load_model() if model is None else model 
