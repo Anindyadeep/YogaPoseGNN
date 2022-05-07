@@ -21,11 +21,21 @@ sys.path.append("..")
 
 class PoseUtils(object):
     def __init__(self, parent_path = None, train_image_folder_name = None, test_image_folder_name = None):
+        """
+        args:
+        -----
+        parent_path : (str) the root path of the project 
+        train_image_folder_name : (str) the name of the train image folders 
+        test_image_folder_name : (str) the name of the test image folders 
+        """
         self.base_path = BASEDIR if parent_path is None else parent_path
         self.train_image_folder_name = "DATASET/TRAIN" if train_image_folder_name is None else train_image_folder_name
         self.test_image_folder_name = "DATASET/TEST" if test_image_folder_name is None else test_image_folder_name 
     
     def random_shift_data_points_from_test_to_train_folder(self, train_folder_name, test_folder_name):
+        """
+        This function will randomly take some datapoints from the test image folder and populate the train folder 
+        """
         train_folder = os.path.join(self.base_path, self.train_image_folder_name, train_folder_name)
         test_folder = os.path.join(self.base_path, self.test_image_folder_name, test_folder_name)
 
@@ -40,6 +50,9 @@ class PoseUtils(object):
         print(f"finished moving {sample_length} images out of {len(test_images)} from {test_folder_name} to {train_folder}")
     
     def get_label_dict(self):
+        """
+        Generating the labels from the image folders 
+        """
         path = os.path.join(self.base_path, self.train_image_folder_name)
         labels = os.listdir(path)
         num_labels = np.arange(len(labels))
@@ -47,6 +60,9 @@ class PoseUtils(object):
         return dict(zip_iterator)
 
     def get_pose_landmark_positions(self, pose_landmarks):
+        """
+        Picking the pose landmarks co-ordinates from mediapipe's pose landmark skeleton graph.
+        """
 
         left_shoulder = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER] # 11
         right_shoulder = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER] # 12
@@ -131,6 +147,18 @@ class PoseUtils(object):
 
 
     def get_pose_marks_coords_dict_for_image(self, img_path, pose_label, pose_landmarks):
+        """
+        args
+        ----
+        img_path : the path of the image 
+        pose_label : the label of the image 
+        pose_landmarks : the pose landmarks generated from mediapipe pose model 
+
+        returns
+        -------
+        A dict of co-ordinate information of different pose joints. 
+
+        """
         pose_land_marks_coords = self.get_pose_landmark_positions(pose_landmarks)
         pose_land_marks_coords['Image Path'] = img_path
         pose_land_marks_coords['Label'] = pose_label
@@ -139,6 +167,17 @@ class PoseUtils(object):
     
 
     def read_single_image(self, file):
+        """
+        Reads a single image file and extracts the corresponding pose landmarks 
+        args:
+        ----
+        file : the image file 
+
+        returns:
+        --------
+        mediapipe pose landmark results
+        """
+
         BG_COLOR = (192, 192, 192)
         with mp_pose.Pose(
             static_image_mode = True,
@@ -151,6 +190,18 @@ class PoseUtils(object):
     
 
     def create_landmark_csv_from_single_image_folder(self, image_folder_name, label):
+        """
+        Iterates over each image files from the folder and extract the keypoints and create a csv file. This is only for a single image folder.
+        args:
+        ----
+        image_folder_name : the name of the target image folder to convert
+        label : the label or name of the class 
+
+        returns
+        -------
+        A pandas dataframe object 
+        """
+
         image_folder_path = os.path.join(self.base_path, image_folder_name)
         images = os.listdir(image_folder_path)
         img_list = []
@@ -172,6 +223,15 @@ class PoseUtils(object):
 
     
     def create_csv_from_landmarks(self, save_csv_folder_name, test = False):
+        """
+        Creates a csv file by iterating all the class image folders and creating the csv containing pose keypoints 
+        The generated CSV file will be saved in Data/CSV 
+
+        args:
+        ----
+        save_csv_folder_name : (str) the name of the csv file to save 
+        test : (boolean) whether to save in train folder or test folder.
+        """
         train_base_path = os.path.join(self.base_path, self.train_image_folder_name)
         train_csvs_path = os.path.join(self.base_path, save_csv_folder_name)
         labels = os.listdir(train_base_path)
@@ -200,6 +260,17 @@ class PoseUtils(object):
 
     
     def concat_all_csv_into_one(self, all_csv_path, save_file_folder_name, shuffle = True, split = None, test = False):
+        """
+        Concats all the CSV files in a given folder and saves the final concated csv file to an another folder 
+        args:
+        ----
+        all_csv_path : (str) the CSV folder path (either train or test)
+        save_csv_folder_name : (str) the name of the folder to save the concated csv files 
+        shuffle : (boolean) Whether to shuffle rows or not.
+        split : (int) Splits the concated data into two parts (e.g. train and validation)
+        test : (boolean) Whether the file is a test file or not 
+
+        """
         all_csv_file_paths = os.path.join(self.base_path, all_csv_path)
         save_file_folder_path = os.path.join(self.base_path, save_file_folder_name)
 
@@ -237,6 +308,13 @@ class PoseUtils(object):
             print("Files are present already")
     
     def train_validation_split(self, df, split_size):
+        """
+        Splits the file into train and validation files.
+        args:
+        ----
+        df : (int) the dataframe to split 
+        split_size : (float) the train : validation ratio  
+        """
         total_size = df.shape[0]
         valid_size = int(total_size * split_size)
         train_size = total_size - valid_size

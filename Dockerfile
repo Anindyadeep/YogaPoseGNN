@@ -19,6 +19,9 @@ COPY Models/ YogaPoseGNN/Models/
 COPY saved_models/ YogaPoseGNN/saved_models/
 COPY run.py YogaPoseGNN 
 COPY src/ YogaPoseGNN/src  
+COPY favicon.ico YogaPoseGNN
+COPY README.md YogaPoseGNN
+COPY me.md YogaPoseGNN
 
 
 RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
@@ -27,4 +30,4 @@ RUN pip3 install mediapipe streamlit opencv-python
 
 WORKDIR "/YogaPoseGNN"
 RUN ls 
-CMD ["streamlit", "run", "app.py"]
+CMD streamlit run app.py --server.port $PORT

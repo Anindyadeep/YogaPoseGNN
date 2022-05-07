@@ -22,6 +22,18 @@ sys.path.append("..")
 
 class YogaPosDataset(Dataset):
     def __init__(self, root, file_name, valid = False, test = False, transform = None, pre_transform = None, add_self_loops = False, normalize_edge = False):
+        """
+        args:
+        -----
+        root : (str) the root path of the required data folder 
+        file_name : (str) the name of the file 
+        valid : (boolean) Is the file be used for validation set 
+        test : (boolean) Whether the file be used for the test set 
+        transform : (boolean) Whether to perform transformation (such as Normalization or Graph Augmentations or not)
+        pre_transform : (boolean) Similar to transform 
+        add_self_loops : (boolean) Whether to add self loops to the nodes of the generated graph or not
+        normalize_edge : (boolean) Whether to normalize the egde values or not.
+        """
         self.test = test 
         self.valid = valid
         self.file_name = file_name
@@ -76,13 +88,7 @@ class YogaPosDataset(Dataset):
             source_indices.append(pos[0])
             target_indices.append(pos[1])
 
-        edge_indices = np.array([
-            source_indices,
-            target_indices
-        ], dtype=np.float32)
-
-
-
+        edge_indices = np.array([source_indices, target_indices], dtype=np.float32)
         edge_index = torch.tensor(edge_indices, dtype=torch.long)
 
         if add_self_loops:
@@ -101,6 +107,10 @@ class YogaPosDataset(Dataset):
     
     @property
     def processed_file_names(self):
+        """
+        returns the processed file names 
+        """
+
         self.data = pd.read_csv(self.raw_paths[0]).reset_index(drop=True)
         if "Unnamed: 0" in self.data.columns:
             self.data = self.data.drop(['Unnamed: 0'], axis=1)
@@ -137,6 +147,9 @@ class YogaPosDataset(Dataset):
         return data 
     
     def process(self):
+        """
+        The processing step for the conversion of the csv data to tabular data 
+        """
         self.data = pd.read_csv(self.raw_paths[0]).reset_index(drop=True)
         self.data = self.data.reset_index(drop=True)
         if "Unnamed: 0" in self.data.columns:

@@ -11,6 +11,15 @@ from src.live_detection import PoseRun
 parser = argparse.ArgumentParser(description="Different configurations to run the model for live yoga pose detection")
 
 parser.add_argument(
+    "--task",
+    dest="task",
+    type=str,
+    help="Whether to use cam or use from a video file",
+    default="cam",
+    required=True
+    )
+
+parser.add_argument(
   "--device",
   dest="device",
   type=str,
@@ -47,6 +56,14 @@ parser.add_argument(
 
 
 parser.add_argument(
+  "--hide_bg",
+  dest="hide_bg",
+  type=bool,
+  default=None,
+  help="Whether to hide background or not."
+)
+
+parser.add_argument(
   "--model",
   dest="model",
   type=str,
@@ -57,9 +74,12 @@ parser.add_argument(
 args = parser.parse_args()
 
 poserun = PoseRun(device=args.device)
-poserun.run_video(
-  video_name=args.vid_name,
-  cam_num=args.cam,
-  capture_save_as=args.save_as,
-  model=args.model
-)
+if args.task == 'cam':
+    poserun.run_pose_on_webcam(
+        cam_num = args.cam, 
+        black_blackground = args.hide_bg)
+else:
+    poserun.run_pose_on_video_source(
+        source_file_path = args.vid_name, 
+        model = args.model, 
+        black_blackground = args.hide_bg)

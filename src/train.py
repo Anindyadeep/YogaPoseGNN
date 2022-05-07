@@ -19,11 +19,25 @@ sys.path.append("..")
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
+
 class TrainModel(nn.Module):
     def __init__(self, model):
         pass
     
     def train_model_perbatch(self, model, loader, criterion, optimizer):
+        """
+        Function to train the model for a single epoch or train all the batches 
+        args:
+        ----
+        model : (torch.nn.Module) Pytorch model 
+        loader : (torch.utils.data.DataLoader) The DataLoader to train from 
+        criterion : (torch.nn.Module) The loss Function
+        optimizer : (torch.optim) The optimizer
+
+        returns:
+        -------
+        This will return the mean batch loss (or a loss for 1 single epoch) and the accuracy of the model   
+        """
         running_loss = 0.0
         num_correct = 0.0
 
@@ -47,6 +61,18 @@ class TrainModel(nn.Module):
 
 
     def test_model_perbatch(self, model, loader, criterion):
+        """
+        Function to test the model for a single epoch
+        args:
+        ----
+        model : (torch.nn.Module) Pytorch model 
+        loader : (torch.utils.data.DataLoader) The DataLoader to train from 
+        criterion : (torch.nn.Module) The loss Function
+
+        returns:
+        -------
+        This will return the mean batch loss (or a loss for 1 single epoch) and the accuracy of the model 
+        """
         model.eval()
         running_loss = 0.0
         num_correct = 0.0
@@ -66,6 +92,13 @@ class TrainModel(nn.Module):
     
 
     def evaluate_model(self, model, loader):
+        """
+        This will return the accuracy of the model for a very single batch 
+        args:
+        ----
+        model : (torch.nn.Module) Pytorch model 
+        loader : (torch.utils.data.DataLoader) The DataLoader to train from 
+        """
         with torch.no_grad():
             graph = next(iter(loader))
             x = graph.x.to(device)

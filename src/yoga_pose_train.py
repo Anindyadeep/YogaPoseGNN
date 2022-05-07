@@ -19,7 +19,6 @@ BASEDIR = Path(__file__).resolve(strict=True).parent.parent
 sys.path.append(BASEDIR)
 sys.path.append("..")
 
-
 from src.utils import PoseUtils
 from src.dataset import YogaPosDataset
 from src.train import TrainModel
@@ -27,15 +26,44 @@ from Models import base_gnn_model
 
 class YogaPoseTrain(object):
     def __init__(self, base_path = None, device = None):
+        """
+        args:
+        ----
+        base_path : (str) the root path of the project 
+        device : (str) the device to train the model 
+        """
         self.base_path = BASEDIR if base_path is None else base_path
         self.device = ("cuda" if torch.cuda.is_available() else "cpu") if device is None else device
         self.root_data_path = os.path.join(self.base_path, "Data/")
     
     def load_pretrained_model(self, model, model_path):
+        """
+        Loads a pretrained PyTorch model which has an extension of .pth 
+        args:
+        ----
+        model : (torch.nn.Module) The PyTorch model 
+        model_path : (str) The path of the pretrained weights and the configuration of the model 
+
+        returns:
+        --------
+        PyTorch (torch.nn.Module) model object with pretrained weights 
+        """
         model.load_state_dict(torch.load(model_path, map_location=torch.device(self.device)))
         return model 
     
     def load_data_loader(self, csv_name, batch_size = 64, shuffle = True):
+        """
+        Loads the PyTorch DataLoader
+        args:
+        ----
+        csv_name : (str) The name of the CSV file name to create the dataloader 
+        batch_size : (int) The batch size of the dataloader
+        shuffle : (boolean) Whether to shuffle the datapoints or not 
+
+        returns:
+        --------
+        Returns the PyTorch (torch.utils.data.DataLoader) object 
+        """
         dataset = YogaPosDataset(self.root_data_path, csv_name)
         data_loader = DataLoader(
             dataset, 
@@ -46,6 +74,19 @@ class YogaPoseTrain(object):
         return data_loader 
     
     def train(self, model, criterion, optimizer, epochs, train_loader, test_loader, valid_loader = None, model_save_name = None):
+        """
+        Custom Training function to train the existing model or a new model 
+        args:
+        -----
+        model : (torch.nn.Module) The PyTorch model 
+        criterion : (torch.nn.Module) The loss Function
+        optimizer : (torch.optim) The optimizer
+        epochs : (int) The number of iteration to train the model 
+        train_loader : (torch.utils.data.DataLoader) The Train DataLoader
+        test_loader : (torch.utils.data.DataLoader) The Test DataLoader
+        valid_loader : (torch.utils.data.DataLoader) The Validation DataLoader (not required if not mandatory)
+        model_save_name : (str) The name of the model to save in .pth path 
+        """
         self.train_model = TrainModel(model)
 
         for epoch in tqdm(range(1, epochs + 1)):
@@ -63,15 +104,3 @@ class YogaPoseTrain(object):
 
         test_loss, test_acc = self.train_model.test_model_perbatch(model, test_loader, criterion)
         print(f"Test Loss: {test_loss} Test Accuracy: {test_acc}")
-
-
-if __name__ == '__main__':
-    yoga_pos = YogaPoseTrain()
-    train_loader = yoga_pos.load_data_loader("train_data.csv")
-    test_loader = yoga_pos.load_data_loader("test_data.csv")
-
-    model = base_gnn_model.Model(3, 64, 16, 5)
-    criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
-
-    yoga_pos.train(model, criterion, optimizer, 30, train_loader, test_loader)
