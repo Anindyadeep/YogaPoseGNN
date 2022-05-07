@@ -1,3 +1,4 @@
+heroku restart
 heroku login 
 heroku container:login
 heroku container:push web -a yogaposegnn
