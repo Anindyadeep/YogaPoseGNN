@@ -25,9 +25,11 @@ COPY me.md YogaPoseGNN
 
 
 RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
-RUN pip3 install torch-scatter torch-sparse torch-cluster torch-spline-conv torch-geometric -f https://data.pyg.org/whl/torch-1.11.0+cpu.html
+RUN pip3 install torch-scatter torch-sparse torch-cluster torch-spline-conv torch-geometric -f https://data.pyg.org/whl/torch-1.12.0+cpu.html
 RUN pip3 install mediapipe streamlit opencv-python 
 
 WORKDIR "/YogaPoseGNN"
 RUN ls 
-CMD streamlit run app.py --server.port $PORT
+EXPOSE 8900
+ENTRYPOINT ["streamlit", "run"]
+CMD ["app.py"]

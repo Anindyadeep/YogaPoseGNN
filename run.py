@@ -16,7 +16,7 @@ parser.add_argument(
     type=str,
     help="Whether to use cam or use from a video file",
     default="cam",
-    required=True
+    required=False 
     )
 
 parser.add_argument(
