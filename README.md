@@ -12,7 +12,8 @@
 1. [ Running the project locally ](#run_project_locally)
 2. [ How to train a new model or retrain the existing model ](#re_train_model)
 3. [ Results ](#results)
-4. [ Future Works ](#future_works)
+4. [ Improvements after version 1.0 release ](#improvements)
+5. [ Future Works ](#future_works)
 
 ----
 <br>
@@ -137,6 +138,7 @@ Intial results of the model is pretty good based on the fact it has relatively l
 ---
 <br>
 
+<a name="improvements"></a>
 ## **Improvements done after release of version 1.0**
 
 **Software improvements**
