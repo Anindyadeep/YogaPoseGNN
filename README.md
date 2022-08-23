@@ -51,7 +51,7 @@ providing OS and camera privilages are very much important, so we need to use th
 
 ### **Runing the project using python**
 
-This project is using **OpenCV**, **TensorFlow**, **PyTorch**, **PyTorch Geometric**, and **mediapipe**.
+This project is using **OpenCV**, **PyTorch**, **PyTorch Geometric**, and **mediapipe**.
 
 First clone the project repo. Create a new environment using `conda` or `virtualenv`. Once created, you need to install the following packages. First checkout the whether you have cuda installed in your system or not. Based on that go to the **[PyTorch's](https://pytorch.org/)** website and intall PyTorch. Once done, move over to **[PyTorch Geometric's](https://pytorch-geometric.readthedocs.io/en/latest/notes/installation.html)**. Be careful while installing the packages. Make sure you install the current version. 
 
@@ -59,10 +59,17 @@ Install opencv, tensorflow and mediapipe as follows:
 
 ```bash
 
-$ pip install tensorflow
 $ pip install mediapipe
 $ pip install opencv-python
 
+```
+
+Or you can directly install this if you want to use CPU but not cuda and compatible with this application package versions. 
+
+```bash
+$ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
+$ pip3 install torch-scatter torch-sparse torch-cluster torch-spline-conv torch-geometric -f https://data.pyg.org/whl/torch-1.12.0+cpu.html
+$ pip3 install mediapipe streamlit opencv-python 
 ```
 
 Once all the required libraries are installed properly, then there are different ways in which you can run this project. If you just want to run the project using simply web cam then run this command
