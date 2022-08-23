@@ -156,7 +156,7 @@ Intial results of the model is pretty good based on the fact it has relatively l
 **ML Model Improvements**
 
 1. Minor changes in model, tweaked some hyper parameters and implemented BatchNorm. 
-2. GraphAttention Conv increased it's test accuracy by 2 %/
+2. GraphAttention Conv increased it's test accuracy by 2 %
 
 ---
 
