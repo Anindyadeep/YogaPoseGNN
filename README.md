@@ -4,8 +4,7 @@
 
 [GIF credits](https://www.youtube.com/watch?v=k4qaVoAbeHM&ab_channel=Howcast). This is another kinda same project done and made on the top of [SignLangGNN](https://github.com/Anindyadeep/SignLangGNN). But this project is much more robust and accurate and can perform real time Yoga position classification using Graph Neural Networks. The best part of this project is that the CPU utlization. As its just using some pixel co-ordinate changes in the video. Also Graph neural networks are emerging more and more in several aspects of computer vision. So this problem is framed as a graph classification problem. I used a simple two Graph Attention layers and a softmax classifier as the network architecture. In just 20 epochs it gives an accuracy of `0.91` and `0.89` of train and test accuracy respectively. `Better than the previous versions`.
 
-----
-<br>
+---
 
 ## **Contents**
 
@@ -15,12 +14,10 @@
 4. [ Improvements after version 1.0 release ](#improvements)
 5. [ Future Works ](#future_works)
 
-----
-<br>
+---
 
 <a name="run_project_locally"></a>
 ## **Running the project Locally**
-<br>
 
 ### **Using Docker**
 
@@ -47,7 +44,6 @@ providing OS and camera privilages are very much important, so we need to use th
 
 ----
 
-<br>
 
 ### **Runing the project using python**
 
@@ -102,7 +98,6 @@ And this will run the webapp on the localhost
 
 
 ----
-<br>
 
 
 <a name="re_train_model"></a>
@@ -143,7 +138,6 @@ This will train the model and will save the weights on the `saved_models` direct
 Intial results of the model is pretty good based on the fact it has relatively less training data as its just 250 images (per class). After training the model is giving a train accuracy of `0.89` and a test accuracy of `0.91`. This could be improved by improving the model and adding edge features also. This model is also using limited nodes, as I did't add the face and the palm nodes, in order to make it more realistic. 
 
 ---
-<br>
 
 <a name="improvements"></a>
 ## **Improvements done after release of version 1.0**
@@ -159,8 +153,6 @@ Intial results of the model is pretty good based on the fact it has relatively l
 2. GraphAttention Conv increased it's test accuracy by 2 %
 
 ---
-
-<br>
 
 <a name="future_works"></a>
 ## **Future Works**
