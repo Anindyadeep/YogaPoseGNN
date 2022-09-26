@@ -22,7 +22,7 @@
 
 ### **Using Docker**
 
-The docker image is been released in **DockerHub** 🥳
+The docker image is been released in [**DockerHub**](https://hub.docker.com/repository/docker/anindyadeep/yoga_pose_gnn) 🥳
 ```bash
 $ docker run --privileged --device=/dev/video0:/dev/video0 anindyadeep/yoga_pose_gnn:master-3e72318
 ```
