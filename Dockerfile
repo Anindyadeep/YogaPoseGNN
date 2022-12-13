@@ -43,4 +43,4 @@ WORKDIR "/YogaPoseGNN"
 RUN ls 
 EXPOSE 8900
 ENTRYPOINT ["streamlit", "run"]
-CMD ["app.py"]
+CMD ["streamlit_app.py"]
