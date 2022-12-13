@@ -21,7 +21,7 @@ RUN mkdir YogaPoseGNN/Data
 
 # COPY all the required files to those directories.
 
-COPY app.py YogaPoseGNN
+COPY streamlit_app.py YogaPoseGNN
 COPY Data/ YogaPoseGNN/Data/
 COPY Models/ YogaPoseGNN/Models/ 
 COPY saved_models/ YogaPoseGNN/saved_models/
