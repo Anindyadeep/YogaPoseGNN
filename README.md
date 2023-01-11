@@ -1,4 +1,4 @@
-# **YogaPosGNN** `V2.0`
+# **AteltaWeb** 
 
 ![Alt Text](Images/warrior-result_2IogI1xJ.gif)
 
