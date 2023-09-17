@@ -1,4 +1,4 @@
-# **YogaPosGNN** `Version 2.0`
+# **YogaPoseGNN** 
 
 ![Alt Text](Images/warrior-result_2IogI1xJ.gif)
 
@@ -21,7 +21,7 @@
 
 ### **Using Docker**
 
-The docker image is been released in **DockerHub** 🥳
+The docker image is been released in [**DockerHub**](https://hub.docker.com/repository/docker/anindyadeep/yoga_pose_gnn) 🥳
 ```bash
 $ docker run --privileged --device=/dev/video0:/dev/video0 anindyadeep/yoga_pose_gnn:master-3e72318
 ```
@@ -44,7 +44,6 @@ providing OS and camera privilages are very much important, so we need to use th
 
 ----
 
-
 ### **Runing the project using python**
 
 This project is using **OpenCV**, **PyTorch**, **PyTorch Geometric**, and **mediapipe**.
@@ -64,7 +63,8 @@ Or you can directly install this if you want to use CPU but not cuda and compati
 
 ```bash
 $ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
-$ pip3 install torch-scatter torch-sparse torch-cluster torch-spline-conv torch-geometric -f https://data.pyg.org/whl/torch-1.12.0+cpu.html
+$ pip3 install torch-scatter torch-sparse torch-cluster \
+  torch-spline-conv torch-geometric -f https://data.pyg.org/whl/torch-1.12.0+cpu.html
 $ pip3 install mediapipe streamlit opencv-python 
 ```
 
