@@ -18,7 +18,6 @@
 
 <a name="run_project_locally"></a>
 ## **Running the project Locally**
-<br>
 
 ### **Using Docker**
 
@@ -99,7 +98,6 @@ And this will run the webapp on the localhost
 
 
 ----
-<br>
 
 
 <a name="re_train_model"></a>
@@ -140,7 +138,6 @@ This will train the model and will save the weights on the `saved_models` direct
 Intial results of the model is pretty good based on the fact it has relatively less training data as its just 250 images (per class). After training the model is giving a train accuracy of `0.89` and a test accuracy of `0.91`. This could be improved by improving the model and adding edge features also. This model is also using limited nodes, as I did't add the face and the palm nodes, in order to make it more realistic. 
 
 ---
-<br>
 
 <a name="improvements"></a>
 ## **Improvements done after release of version 1.0**
@@ -156,8 +153,6 @@ Intial results of the model is pretty good based on the fact it has relatively l
 2. GraphAttention Conv increased it's test accuracy by 2 %
 
 ---
-
-<br>
 
 <a name="future_works"></a>
 ## **Future Works**
